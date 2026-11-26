@@ -1,0 +1,6 @@
+{
+    "DESIGN_NAME": "adder",
+    "VERILOG_FILES": ["dir::src/adder.v"],
+    "FP_SIZING": "relative",
+    "FP_CORE_UTIL": 40
+}
