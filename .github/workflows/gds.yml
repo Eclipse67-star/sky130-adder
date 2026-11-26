@@ -21,6 +21,9 @@ jobs:
             extra-trusted-public-keys = openlane.cachix.org-1:qqdwh+QMNGmZAuyeQJTH9ErW57OWSvdtuwfBKdS254E=
 
       - name: Run OpenLane 2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VOLARE_REPO_OWNER: chipfoundry
         run: nix run --accept-flake-config github:chipfoundry/openlane2 -- config.json
 
       - name: Prepare GDS for 3D Viewer
@@ -66,4 +69,3 @@ jobs:
         run: |
           echo "### View Your Chip in 3D" >> $GITHUB_STEP_SUMMARY
           echo "[Open in Tiny Tapeout 3D GDS Viewer](https://tinytapeout.com)" >> $GITHUB_STEP_SUMMARY
-
