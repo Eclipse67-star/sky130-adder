@@ -1,0 +1,26 @@
+name: OpenLane 2 GDS Build
+on: [push]
+
+jobs:
+  build_gds:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nix with OpenLane Cache
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            extra-substituters = https://openlane.cachix.org
+            extra-trusted-public-keys = openlane.cachix.org-1:qqdwh+QMNGmZAuyeQJTH9ErW57OWSvdtuwfBKdS254E=
+
+      - name: Run OpenLane 2
+        run: nix run github:chipfoundry/openlane2 -- config.json
+
+      - name: Upload Final GDS & Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: adder-gds-output
+          path: runs/
