@@ -57,14 +57,13 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: https://tinytapeout.com{{ steps.deployment.outputs.page_url }}design.gds
+      url: https://tinytapeout.com
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
 
       - name: Generate 3D GDS Viewer Link
         run: |
-          FULL_URL="https://tinytapeout.com{{ steps.deployment.outputs.page_url }}design.gds"
           echo "### View Your Chip in 3D" >> $GITHUB_STEP_SUMMARY
-          echo "[Open in Tiny Tapeout 3D GDS Viewer](${FULL_URL})" >> $GITHUB_STEP_SUMMARY
+          echo "[Open in Tiny Tapeout 3D GDS Viewer](https://tinytapeout.com)" >> $GITHUB_STEP_SUMMARY
+
