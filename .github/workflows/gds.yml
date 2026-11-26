@@ -1,6 +1,11 @@
 name: OpenLane 2 GDS Build
 on: [push]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build_gds:
     runs-on: ubuntu-latest
@@ -16,11 +21,40 @@ jobs:
             extra-trusted-public-keys = openlane.cachix.org-1:qqdwh+QMNGmZAuyeQJTH9ErW57OWSvdtuwfBKdS254E=
 
       - name: Run OpenLane 2
-        run: nix run github:chipfoundry/openlane2 -- config.json
+        run: nix run --accept-flake-config github:chipfoundry/openlane2 -- config.json
 
-      - name: Upload Final GDS & Reports
+      - name: Prepare GDS for 3D Viewer
+        run: |
+          mkdir -p site
+          GDS_FILE=$(find runs -path "*/final/gds/*.gds" | head -n 1)
+          cp "$GDS_FILE" site/design.gds
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+      - name: Upload Full Run Artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: adder-gds-output
+          name: gds-output
           path: runs/
+
+  deploy_viewer:
+    needs: build_gds
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Generate 3D GDS Viewer Link
+        run: |
+          GDS_URL="${{ steps.deployment.outputs.page_url }}design.gds"
+          VIEWER_URL="https://tinytapeout.com{GDS_URL}"
+          echo "### View Your Chip in 3D" >> $GITHUB_STEP_SUMMARY
+          echo "[Open in Tiny Tapeout 3D GDS Viewer](${VIEWER_URL})" >> $GITHUB_STEP_SUMMARY
