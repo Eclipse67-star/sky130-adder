@@ -1,7 +1,7 @@
 {
-    "DESIGN_NAME": "adder",
-    "VERILOG_FILES": ["dir::src/adder.v"],
+    "DESIGN_NAME": "adder_subtractor",
+    "VERILOG_FILES": ["dir::src/adder_subtractor.v"],
     "CLOCK_PORT": null,
     "FP_SIZING": "absolute",
-    "DIE_AREA": [0, 0, 50, 50]
+    "DIE_AREA":
 }
