@@ -35,7 +35,7 @@ jobs:
           <!DOCTYPE html>
           <html>
             <head>
-              <meta http-equiv="refresh" content="0; url=https://tinytapeout.com" />
+              <meta http-equiv="refresh" content="0; url=https://gds-viewer.tinytapeout.com/?model=https://eclipse67-star.github.io/sky130-adder/design.gds" />
             </head>
             <body>
               <p>Redirecting to <a href="https://tinytapeout.com">Tiny Tapeout 3D GDS Viewer</a>...</p>
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: https://tinytapeout.com
+      url: https://gds-viewer.tinytapeout.com/?model=https://eclipse67-star.github.io/sky130-adder/design.gds
     steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
@@ -68,4 +68,4 @@ jobs:
       - name: Generate 3D GDS Viewer Link
         run: |
           echo "### View Your Chip in 3D" >> $GITHUB_STEP_SUMMARY
-          echo "[Open in Tiny Tapeout 3D GDS Viewer](https://tinytapeout.com)" >> $GITHUB_STEP_SUMMARY
+          echo "[Open in Tiny Tapeout 3D GDS Viewer](https://gds-viewer.tinytapeout.com/?model=https://eclipse67-star.github.io/sky130-adder/design.gds)" >> $GITHUB_STEP_SUMMARY
