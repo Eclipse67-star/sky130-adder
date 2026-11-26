@@ -28,6 +28,17 @@ jobs:
           mkdir -p site
           GDS_FILE=$(find runs -path "*/final/gds/*.gds" | head -n 1)
           cp "$GDS_FILE" site/design.gds
+          cat << 'EOF' > site/index.html
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta http-equiv="refresh" content="0; url=https://tinytapeout.com" />
+            </head>
+            <body>
+              <p>Redirecting to <a href="https://tinytapeout.com">Tiny Tapeout 3D GDS Viewer</a>...</p>
+            </body>
+          </html>
+          EOF
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
@@ -46,15 +57,16 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.viewer_link.outputs.url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Generate 3D GDS Viewer Link
+      - name: Build Direct 3D Viewer URL
+        id: viewer_link
         run: |
-          GDS_URL="${{ steps.deployment.outputs.page_url }}design.gds"
-          VIEWER_URL="https://tinytapeout.com{GDS_URL}"
+          FULL_URL="https://tinytapeout.com{{ steps.deployment.outputs.page_url }}design.gds"
+          echo "url=${FULL_URL}" >> $GITHUB_OUTPUT
           echo "### View Your Chip in 3D" >> $GITHUB_STEP_SUMMARY
-          echo "[Open in Tiny Tapeout 3D GDS Viewer](${VIEWER_URL})" >> $GITHUB_STEP_SUMMARY
+          echo "[Open in Tiny Tapeout 3D GDS Viewer](${FULL_URL})" >> $GITHUB_STEP_SUMMARY
