@@ -4,8 +4,12 @@ module adder_subtractor (
     input  wire [3:0] c,
     input  wire [3:0] d,
     output wire [4:0] sum,
-    output wire [4:0] diff
+    output wire [4:0] diff,
+    input wire e,
+    input wire f,
+    output wire Nand 
 );
     assign sum  = a + b;
     assign diff = {1'b0, c} - {1'b0, d};
+    assign Nand = ~(e & f);
 endmodule
